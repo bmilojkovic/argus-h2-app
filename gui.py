@@ -1,5 +1,7 @@
+
+import asyncio
 import tkinter as tk
-from async_tkinter_loop import async_handler, async_mainloop
+from async_tkinter_loop import async_handler, async_mainloop, get_event_loop
 from tkinter import filedialog
 import os
 
@@ -52,6 +54,9 @@ async def perform_twitch_connection():
     update_twitch_connection(argus_token != None, profile_pic)
 
 async def check_twitch_connection():
+    # give time to the GUI thread to finish drawing
+    await asyncio.sleep(1)
+
     argus_token, profile_pic = argus_auth.get_argus_token()
 
     gui_components.twitch_connect_button.config(state="enabled")
@@ -60,7 +65,7 @@ async def check_twitch_connection():
     else:
         update_twitch_connection(False, None)
         
-def check_twitch_connection_command():
+def check_twitch_connection_wrapper():
     # Checking if our Argus token is good might take a while, so we async it
     async_handler(check_twitch_connection)()
 
@@ -68,7 +73,7 @@ def make_gui():
     # The GUI components are created in gui_components.py
     # Here we do all the GUI configuration and packing
 
-    #gui_components.root.rowconfigure(0, weight=1)
+    gui_components.root.resizable(False, False)
     gui_components.root.columnconfigure(0, weight=1)
     gui_components.root.columnconfigure(1, weight=1)
 
@@ -101,13 +106,15 @@ def make_gui():
     gui_components.twitch_connect_button.config(command=async_handler(perform_twitch_connection))
     gui_components.twitch_connect_button.grid(row=5, column=1)
 
-    gui_components.root.after(100, check_twitch_connection_command)
-
     # empty row as a separator
     gui_components.root.rowconfigure(6, minsize=30)
 
     # info text
     gui_components.info_label.grid(row=7, column=0, columnspan=2)
 
-    # Start the Tkinter event loop
-    async_mainloop(gui_components.root)
+    # set up the twitch check task that we want to do in the background on startup
+    check_event_loop = asyncio.new_event_loop()
+    check_task = check_event_loop.create_task(check_twitch_connection())
+    # start the Tkinter event loop
+    async_mainloop(gui_components.root, check_event_loop)
+    

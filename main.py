@@ -1,11 +1,10 @@
-from gui import make_gui
+from async_tkinter_loop import async_handler
+from gui import check_twitch_connection, make_gui
 
 import os
 import subprocess
 
 from slpp import slpp
-
-from argus_util import argus_log
 
 def read_save():
     save_file_path = "test" + os.sep + "Profile1_Temp.sav"
