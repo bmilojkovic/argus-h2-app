@@ -47,13 +47,15 @@ root = tk.Tk()
 check_icon = get_tabler_icon_as_tk_image(OutlineIcon.CHECK, size=32, color='#28a745')
 x_icon = get_tabler_icon_as_tk_image(OutlineIcon.X, size=32, color="#b51233")
 question_icon = get_tabler_icon_as_tk_image(OutlineIcon.QUESTION_MARK, size=32, color="#000000")
-game_path_label = ttk.Label(root, 
+info_icon = get_tabler_icon_as_tk_image(OutlineIcon.INFO_CIRCLE, size=32, color="#000000")
+title_label = ttk.Label(root, text="Argus 👀", font=("Helvetica", 28, "bold")) 
+save_path_label = ttk.Label(root, 
                             image=x_icon, 
-                            text="Hades II Location", 
+                            text="Hades II Save Location", 
                             compound=tk.RIGHT) 
 
-game_path_entry = ttk.Entry(root, width=40, state="disabled")
-game_path_browse_button = ttk.Button(root, text="Browse")
+save_path_entry = ttk.Entry(root, width=40, state="disabled")
+save_path_browse_button = ttk.Button(root, text="Browse")
 
 twitch_connect_label = ttk.Label(root, 
                             image=question_icon, 
@@ -62,3 +64,7 @@ twitch_connect_label = ttk.Label(root,
 twitch_profile_label = ttk.Label(root, 
                             image=question_icon) 
 twitch_connect_button = ttk.Button(root, text="Connect", state="disabled")
+info_label = ttk.Label(root,
+                       image=info_icon,
+                       text="Argus is active if both checks are passing ✅.\nLeave this window open in the background.",
+                       compound=tk.LEFT)
