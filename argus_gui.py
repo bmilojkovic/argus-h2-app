@@ -1,4 +1,3 @@
-
 import asyncio
 import tkinter as tk
 from async_tkinter_loop import async_handler
@@ -6,9 +5,9 @@ from tkinter import filedialog
 import os
 
 import argus_gui_components
-import argus_auth
+import argus_network
+import argus_observing
 
-import argus_parsing
 
 def update_save_location(save_path):
     argus_gui_components.save_path_entry.config(state="enabled")
@@ -17,12 +16,17 @@ def update_save_location(save_path):
     argus_gui_components.save_path_entry.config(state="disabled")
 
     # this file should always be in the save folder
-    if os.path.isdir(save_path) and os.path.isfile(os.path.join(save_path, "GlobalSettingsWin.sjson")):
-        argus_gui_components.save_path_label.config(image = argus_gui_components.check_icon)
-        argus_parsing.set_save_file_path(save_path)
+    if os.path.isdir(save_path) and os.path.isfile(
+        os.path.join(save_path, "GlobalSettingsWin.sjson")
+    ):
+        argus_gui_components.save_path_label.config(
+            image=argus_gui_components.check_icon
+        )
+        argus_observing.set_save_dir_path(save_path)
     else:
-        argus_gui_components.save_path_label.config(image = argus_gui_components.x_icon)
-        argus_parsing.unset_save_file_path()
+        argus_gui_components.save_path_label.config(image=argus_gui_components.x_icon)
+        argus_observing.unset_save_dir_path()
+
 
 def browse_save_location():
     dirpath = filedialog.askdirectory(
@@ -31,47 +35,65 @@ def browse_save_location():
     if dirpath:
         update_save_location(dirpath)
 
+
 def check_save_location():
-    default_save_location = os.path.join(os.environ["USERPROFILE"], "Saved Games", "Hades II")
+    default_save_location = os.path.join(
+        os.environ["USERPROFILE"], "Saved Games", "Hades II"
+    )
     if os.path.isdir(default_save_location):
         update_save_location(default_save_location)
 
+
 def update_twitch_connection(success, argus_token, profile_pic):
     if success:
-        argus_gui_components.twitch_connect_label.config(image=argus_gui_components.check_icon, text="Twitch Connection")
+        argus_gui_components.twitch_connect_label.config(
+            image=argus_gui_components.check_icon, text="Twitch Connection"
+        )
         argus_gui_components.twitch_connect_button.config(text="Reconnect")
-        new_icon = argus_gui_components.read_png_from_url(profile_pic, size=argus_gui_components.twitch_profile_label.winfo_height())
-        if new_icon != None:
+        new_icon = argus_gui_components.read_png_from_url(
+            profile_pic, size=argus_gui_components.twitch_profile_label.winfo_height()
+        )
+        if new_icon is not None:
             argus_gui_components.twitch_profile_label.config(image=new_icon)
             # have to save a reference for garbage collection purposes
             argus_gui_components.twitch_profile_label.image = new_icon
         else:
-            argus_gui_components.twitch_profile_label.config(image=argus_gui_components.question_icon)
-        argus_parsing.set_argus_token(argus_token)
+            argus_gui_components.twitch_profile_label.config(
+                image=argus_gui_components.question_icon
+            )
+        argus_observing.set_argus_token(argus_token)
     else:
-        argus_gui_components.twitch_connect_label.config(image=argus_gui_components.x_icon, text="Twitch Connection")
+        argus_gui_components.twitch_connect_label.config(
+            image=argus_gui_components.x_icon, text="Twitch Connection"
+        )
         argus_gui_components.twitch_connect_button.config(text="Connect")
-        argus_parsing.unset_argus_token()
+        argus_observing.unset_argus_token()
+
 
 async def perform_twitch_connection():
-    argus_token, profile_pic = argus_auth.do_argus_auth()
-    update_twitch_connection(argus_token != None, argus_token, profile_pic)
+    argus_token, profile_pic = argus_network.do_argus_auth()
+    update_twitch_connection(argus_token is not None, argus_token, profile_pic)
+
 
 async def check_twitch_connection():
     # give time to the GUI thread to finish drawing
     await asyncio.sleep(1)
 
-    argus_token, profile_pic = argus_auth.get_argus_token()
+    argus_token, profile_pic = argus_network.get_argus_token()
 
     argus_gui_components.twitch_connect_button.config(state="enabled")
     if argus_token != "FAIL":
-        update_twitch_connection(argus_auth.check_argus_token_ok(argus_token), argus_token, profile_pic)
+        update_twitch_connection(
+            argus_network.check_argus_token_ok(argus_token), argus_token, profile_pic
+        )
     else:
         update_twitch_connection(False, None, None)
-        
+
+
 def check_twitch_connection_wrapper():
     # Checking if our Argus token is good might take a while, so we async it
     async_handler(check_twitch_connection)()
+
 
 def make_gui():
     # The GUI components are created in gui_components.py
@@ -82,7 +104,7 @@ def make_gui():
     argus_gui_components.root.columnconfigure(1, weight=1)
     argus_gui_components.root.title("Argus")
 
-    window_icon_image = tk.PhotoImage(file='logo192.png')
+    window_icon_image = tk.PhotoImage(file="logo192.png")
     argus_gui_components.root.iconphoto(True, window_icon_image)
 
     # title
@@ -106,7 +128,9 @@ def make_gui():
 
     # twitch connect inputs
     argus_gui_components.twitch_profile_label.grid(row=5, column=0)
-    argus_gui_components.twitch_connect_button.config(command=async_handler(perform_twitch_connection))
+    argus_gui_components.twitch_connect_button.config(
+        command=async_handler(perform_twitch_connection)
+    )
     argus_gui_components.twitch_connect_button.grid(row=5, column=1)
 
     # empty row as a separator

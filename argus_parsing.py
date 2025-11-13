@@ -1,94 +1,114 @@
+from argus_parsing_elements import build_elemental_data
+from argus_parsing_familiars import build_familiar_data
+from argus_parsing_identifiers import (
+    is_arcana,
+    is_boon_with_rarity,
+    is_extra_boon,
+    is_familiar,
+    is_weapon,
+)
+from argus_parsing_pins import build_pin_data
+from argus_parsing_vows import build_vow_data
+from argus_util import DATA_SEPARATOR, argus_log
 
-import asyncio
-import os
 
-from argus_util import argus_log
+def read_rarity(trait):
+    if "IsElementalTrait" in trait and trait["IsElementalTrait"]:
+        return "Infusion"
+    if "Rarity" not in trait:
+        return "Common"
+    return trait["Rarity"]
 
-observer_running = True
 
-save_file_path_good = False
-argus_token_good = False
+def read_rarity_and_name(trait):
+    rarity = read_rarity(trait)
+    return rarity + DATA_SEPARATOR + trait["Name"]
 
-save_file_path = ""
-save_dir_state = {}
-argus_token = ""
 
-def set_save_file_path(new_save_file_path):
-    global save_file_path, save_file_path_good
+arcana_rarity_mapping = {
+    "Common": "1",
+    "Rare": "2",
+    "Epic": "3",
+    "Heroic": "4",
+}
 
-    save_file_path = new_save_file_path
-    save_file_path_good = True
 
-    init_save_dir()
+def read_arcana(arcana_trait):
+    arcana_rarity = "1"
 
-def unset_save_file_path():
-    global save_file_path_good, save_dir_state
+    if "Rarity" in arcana_trait:
+        arcana_rarity = arcana_rarity_mapping[arcana_trait["Rarity"]]
 
-    save_file_path_good = False
-    save_dir_state = {}
+    return arcana_rarity + DATA_SEPARATOR + arcana_trait["Name"]
 
-def set_argus_token(new_argus_token):
-    global argus_token, argus_token_good
 
-    argus_token = new_argus_token
-    argus_token_good = True
+def clean_parsed_data(parsed_data):
+    if parsed_data["boonData"] == "":
+        parsed_data["boonData"] = "NOBOONS"
+    if parsed_data["extraData"] == "":
+        parsed_data["extraData"] = "NOEXTRAS"
+    if parsed_data["weaponData"] == "":
+        parsed_data["weaponData"] = "NOWEAPONS"
+    if parsed_data["familiarData"] == "":
+        parsed_data["familiarData"] = "NOFAMILIARS"
+    if parsed_data["elementalData"] == "":
+        parsed_data["elementalData"] = "NOELEMENTS"
+    if parsed_data["vowData"] == "":
+        parsed_data["vowData"] = "NOVOWS"
+    if parsed_data["arcanaData"] == "":
+        parsed_data["arcanaData"] = "NOARCANA"
+    if parsed_data["pinData"] == "":
+        parsed_data["pinData"] = "NOPINS"
 
-def unset_argus_token():
-    global argus_token_good
+    for key in parsed_data:
+        parsed_data[key] = parsed_data[key].strip()
 
-    argus_token_good = False
+    return parsed_data
 
-def init_save_dir():
-    global save_dir_state
 
-    try:
-        with os.scandir(save_file_path) as entries:
-            for entry in entries:
-                if entry.name.endswith("_Temp.sav"):
-                    timestamp = entry.stat().st_mtime
-                    save_dir_state[entry.name] = timestamp
-    except FileNotFoundError:
-        argus_log(f"Error: Directory not found at '{save_file_path}'")
-    except PermissionError:
-        argus_log(f"Error: Permission denied to access '{save_file_path}'")
+def parse_data(save_data):
+    parsed_data = {
+        "boonData": "",
+        "extraData": "",
+        "weaponData": "",
+        "familiarData": "",
+        "elementalData": "",
+        "vowData": "",
+        "arcanaData": "",
+        "pinData": "",
+    }
 
-def find_newest_changed_save():
-    global save_dir_state
+    hero_traits = save_data["CurrentRun"]["Hero"]["Traits"]
+    for trait in hero_traits:
+        if is_boon_with_rarity(trait):
+            parsed_data["boonData"] += read_rarity_and_name(trait) + " "
+        if is_extra_boon(trait):
+            parsed_data["extraData"] += read_rarity_and_name(trait) + " "
+        if is_weapon(trait):
+            parsed_data["weaponData"] = read_rarity_and_name(trait)
+        if is_familiar(trait):
+            parsed_data["familiarData"] = build_familiar_data(trait, hero_traits)
+        if is_arcana(trait):
+            parsed_data["arcanaData"] += read_arcana(trait) + " "
 
-    newest_time = 0
-    newest_file = ""
-    try:
-        with os.scandir(save_file_path) as entries:
-            for entry in entries:
-                if entry.name.endswith("_Temp.sav"):
-                    # Get the last modified timestamp (float representing seconds since the epoch)
-                    timestamp = entry.stat().st_mtime
-                    #argus_log(f"Found {entry.name} with timestamp {timestamp}")
-                    if entry.name not in save_dir_state:
-                        # first time we see a new temp file, we just add it
-                        save_dir_state[entry.name] = timestamp
-                    elif save_dir_state[entry.name] < timestamp:
-                        # next time, we consider it a candidate as long as it updated
-                        save_dir_state[entry.name] = timestamp
-                        if timestamp > newest_time:
-                            newest_time = timestamp
-                            newest_file = entry.name
-    except FileNotFoundError:
-        argus_log(f"Error: Directory not found at '{save_file_path}'")
-    except PermissionError:
-        argus_log(f"Error: Permission denied to access '{save_file_path}'")
+    if parsed_data["weaponData"] == "":
+        argus_log("Couldn't find weapon data.")
+        return "INVALID"
 
-    if newest_time != 0:
-        return newest_file
-    
-    return None
+    if parsed_data["familiarData"] == "INVALID":
+        argus_log("Incomplete familiar data.")
+        return "INVALID"
 
-async def observer_loop():
-    # give the GUI thread a bit of breathing room on start
-    await asyncio.sleep(1)
-    while observer_running:
-        if save_file_path_good and argus_token_good:
-            newest_changed_save = find_newest_changed_save()
-            if newest_changed_save != None:
-                argus_log("Sending data for savefile " + os.path.join(save_file_path, newest_changed_save))
-        await asyncio.sleep(1)
+    if "Elements" in save_data["CurrentRun"]["Hero"]:
+        hero_elements = save_data["CurrentRun"]["Hero"]["Elements"]
+        parsed_data["elementalData"] = build_elemental_data(hero_elements)
+
+    if "StoreItemPins" in save_data["GameState"]:
+        all_pins = save_data["GameState"]["StoreItemPins"]
+        parsed_data["pinData"] = build_pin_data(all_pins)
+
+    if "ShrineUpgrades" in save_data["GameState"]:
+        all_vows = save_data["GameState"]["ShrineUpgrades"]
+        parsed_data["vowData"] = build_vow_data(all_vows)
+
+    return clean_parsed_data(parsed_data)
