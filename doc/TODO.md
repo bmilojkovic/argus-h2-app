@@ -2,8 +2,6 @@
 
 ## To develop
 
-- Figure out how to make an exe for python
-- Change executable file icon
 - Main executable checks if there are updates. If yes:
   - Separate executable downloads the new main exe and updates it.
   - New main exe updates the updater

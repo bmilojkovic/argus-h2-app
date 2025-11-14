@@ -4,8 +4,8 @@ from async_tkinter_loop import async_handler
 from tkinter import filedialog
 import os
 
+from argus_network import do_argus_auth, get_argus_token, check_argus_token_ok
 import argus_gui_components
-import argus_network
 import argus_observing
 
 
@@ -71,7 +71,7 @@ def update_twitch_connection(success, argus_token, profile_pic):
 
 
 async def perform_twitch_connection():
-    argus_token, profile_pic = argus_network.do_argus_auth()
+    argus_token, profile_pic = do_argus_auth()
     update_twitch_connection(argus_token is not None, argus_token, profile_pic)
 
 
@@ -79,12 +79,12 @@ async def check_twitch_connection():
     # give time to the GUI thread to finish drawing
     await asyncio.sleep(1)
 
-    argus_token, profile_pic = argus_network.get_argus_token()
+    argus_token, profile_pic = get_argus_token()
 
     argus_gui_components.twitch_connect_button.config(state="enabled")
     if argus_token != "FAIL":
         update_twitch_connection(
-            argus_network.check_argus_token_ok(argus_token), argus_token, profile_pic
+            check_argus_token_ok(argus_token), argus_token, profile_pic
         )
     else:
         update_twitch_connection(False, None, None)
@@ -95,21 +95,25 @@ def check_twitch_connection_wrapper():
     async_handler(check_twitch_connection)()
 
 
-def make_gui():
-    # The GUI components are created in gui_components.py
-    # Here we do all the GUI configuration and packing
-
+def setup_root():
     argus_gui_components.root.resizable(False, False)
     argus_gui_components.root.columnconfigure(0, weight=1)
     argus_gui_components.root.columnconfigure(1, weight=1)
+    argus_gui_components.root.rowconfigure(0, weight=1)
     argus_gui_components.root.title("Argus")
 
     window_icon_image = tk.PhotoImage(file=os.path.join("img", "logo192.png"))
     argus_gui_components.root.iconphoto(True, window_icon_image)
 
     # title
-    argus_gui_components.root.rowconfigure(0, weight=1)
     argus_gui_components.title_label.grid(row=0, column=0, columnspan=2)
+
+
+def make_main_gui():
+    # The GUI components are created in gui_components.py
+    # Here we do all the GUI configuration and packing
+
+    setup_root()
 
     # save path text
     argus_gui_components.save_path_label.grid(row=1, column=0)
@@ -138,3 +142,28 @@ def make_gui():
 
     # info text
     argus_gui_components.info_label.grid(row=7, column=0, columnspan=2)
+
+
+def make_update_gui(details):
+    setup_root()
+
+    argus_gui_components.update_info_label.grid(row=1, column=0, columnspan=2)
+    argus_gui_components.changelog_label.grid(row=2, column=0, columnspan=2)
+    changelog_message = ""
+    for changelog_line in details["changelog"]:
+        changelog_message += changelog_line + "\n"
+    argus_gui_components.changelog_label.config(text=changelog_message)
+
+    argus_gui_components.update_button.grid(row=3, column=0)
+    argus_gui_components.update_button.config(command=lambda: perform_update(details))
+
+    argus_gui_components.update_quit_button.grid(row=3, column=1)
+    argus_gui_components.update_quit_button.config(command=perform_quit)
+
+
+def perform_update(details):
+    print(str(details))
+
+
+def perform_quit():
+    argus_gui_components.root.destroy()
