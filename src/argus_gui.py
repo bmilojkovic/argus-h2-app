@@ -1,3 +1,4 @@
+import subprocess
 import asyncio
 import tkinter as tk
 from async_tkinter_loop import async_handler
@@ -155,14 +156,15 @@ def make_update_gui(details):
     argus_gui_components.changelog_label.config(text=changelog_message)
 
     argus_gui_components.update_button.grid(row=3, column=0)
-    argus_gui_components.update_button.config(command=lambda: perform_update(details))
+    argus_gui_components.update_button.config(command=perform_update)
 
     argus_gui_components.update_quit_button.grid(row=3, column=1)
     argus_gui_components.update_quit_button.config(command=perform_quit)
 
 
-def perform_update(details):
-    print(str(details))
+def perform_update():
+    subprocess.Popen(["updater.exe"])
+    argus_gui_components.root.destroy()
 
 
 def perform_quit():

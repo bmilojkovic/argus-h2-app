@@ -10,4 +10,5 @@ argus_backend = "https://argus-h2-backend-test.fly.dev"
 
 def argus_log(message):
     now = datetime.now().strftime("%H:%M:%S")
-    sys.stdout.write(now + " " + message + "\n")
+    if sys.stdout is not None:
+        sys.stdout.write(now + " " + message + "\n")

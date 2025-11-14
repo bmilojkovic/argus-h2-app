@@ -23,7 +23,9 @@ def update_check():
             return False
 
     else:
-        argus_log(f"Update check got code {response.status_code}")
+        argus_log(
+            f"Update check got code {response.status_code} with response: {response.text}"
+        )
 
     return True
 
