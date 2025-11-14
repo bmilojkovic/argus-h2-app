@@ -104,7 +104,7 @@ def make_gui():
     argus_gui_components.root.columnconfigure(1, weight=1)
     argus_gui_components.root.title("Argus")
 
-    window_icon_image = tk.PhotoImage(file="logo192.png")
+    window_icon_image = tk.PhotoImage(file=os.path.join("img", "logo192.png"))
     argus_gui_components.root.iconphoto(True, window_icon_image)
 
     # title

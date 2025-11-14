@@ -2,3 +2,4 @@ argus_token.ini
 __pycache__/
 .env/
 current.lua
+src/__pycache__/
