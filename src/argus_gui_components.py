@@ -51,6 +51,7 @@ def get_tabler_icon_as_tk_image(icon_enum, size=24, color="#000000", stroke_widt
 
 
 root = tk.Tk()
+root.configure(bg="white")
 check_icon = get_tabler_icon_as_tk_image(OutlineIcon.CHECK, size=32, color="#28a745")
 x_icon = get_tabler_icon_as_tk_image(OutlineIcon.X, size=32, color="#b51233")
 question_icon = get_tabler_icon_as_tk_image(
@@ -59,33 +60,62 @@ question_icon = get_tabler_icon_as_tk_image(
 info_icon = get_tabler_icon_as_tk_image(
     OutlineIcon.INFO_CIRCLE, size=32, color="#000000"
 )
-title_label = ttk.Label(root, text="Argus 👀", font=("Helvetica", 28, "bold"))
+title_label = ttk.Label(
+    root, text="Argus 👀", font=("Helvetica", 28, "bold"), background="white"
+)
 save_path_label = ttk.Label(
-    root, image=x_icon, text="Hades II Save Location", compound=tk.RIGHT
+    root,
+    image=x_icon,
+    font=("Helvetica", 16),
+    text="Hades II Save Location",
+    compound=tk.RIGHT,
+    background="white",
 )
 
 save_path_entry = ttk.Entry(root, width=40, state="disabled")
 save_path_browse_button = ttk.Button(root, text="Browse")
 
 twitch_connect_label = ttk.Label(
-    root, image=question_icon, text="Twitch Connection: Checking...", compound=tk.RIGHT
+    root,
+    image=question_icon,
+    font=("Helvetica", 16),
+    text="Twitch Connection: Checking...",
+    compound=tk.RIGHT,
+    background="white",
 )
-twitch_profile_label = ttk.Label(root, image=question_icon)
+twitch_profile_label = ttk.Label(root, image=question_icon, background="white")
 twitch_connect_button = ttk.Button(root, text="Connect", state="disabled")
 info_label = ttk.Label(
     root,
     image=info_icon,
-    text="Argus is active if both checks are passing ✅.\nLeave this window open in the background.",
+    font=("Helvetica", 10),
+    text="Both checks need to be passing ✅ for the extension to work.\nLeave this app running in the background while streaming.",
     compound=tk.LEFT,
+    background="white",
 )
 
 # update UI
 update_info_label = ttk.Label(
     root,
     image=info_icon,
-    text="An important update for Argus is available. Please install it before proceeding.\nHere are all the changes:",
+    font=("Helvetica", 10),
+    text=(
+        "An important update for Argus is available.\n"
+        + "Please download it from our release page\n"
+        + "and install it before proceeding.\n"
+        + "Here are all the changes:"
+    ),
     compound=tk.LEFT,
+    background="white",
 )
-changelog_label = ttk.Label(root)
+changelog_label = ttk.Label(root, font=("Helvetica", 16), background="white")
 update_button = ttk.Button(root, text="Update")
 update_quit_button = ttk.Button(root, text="Quit")
+
+# timeout UI
+timeout_label = ttk.Label(
+    root,
+    text="There seems to be an issue with our sevice. :(\nWe are sorry for the inconvenience. Please try again later.",
+    font=("Helvetica", 16),
+    background="white",
+)

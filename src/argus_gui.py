@@ -1,6 +1,7 @@
 import subprocess
 import asyncio
 import tkinter as tk
+import webbrowser
 from async_tkinter_loop import async_handler
 from tkinter import filedialog
 import os
@@ -110,61 +111,84 @@ def setup_root():
     argus_gui_components.title_label.grid(row=0, column=0, columnspan=2)
 
 
+def make_timeout_gui():
+    setup_root()
+
+    # empty row as a separator
+    argus_gui_components.root.rowconfigure(1, minsize=30)
+
+    # timeout label
+    argus_gui_components.timeout_label.grid(row=2, column=0, columnspan=2)
+
+    argus_gui_components.update_quit_button.grid(row=3, column=0, columnspan=2)
+    argus_gui_components.update_quit_button.config(command=perform_quit)
+
+
 def make_main_gui():
     # The GUI components are created in gui_components.py
     # Here we do all the GUI configuration and packing
 
     setup_root()
 
+    # empty row as a separator
+    argus_gui_components.root.rowconfigure(1, minsize=30)
+
     # save path text
-    argus_gui_components.save_path_label.grid(row=1, column=0)
+    argus_gui_components.save_path_label.grid(row=2, column=0, columnspan=2)
 
     # save path inputs
-    argus_gui_components.save_path_entry.grid(row=2, column=0)
+    argus_gui_components.save_path_entry.grid(row=3, column=0)
     check_save_location()
     argus_gui_components.save_path_browse_button.config(command=browse_save_location)
-    argus_gui_components.save_path_browse_button.grid(row=2, column=1)
+    argus_gui_components.save_path_browse_button.grid(row=3, column=1)
+
+    # empty row as a separator
+    argus_gui_components.root.rowconfigure(4, minsize=30)
+
+    # twitch connect text
+    argus_gui_components.twitch_connect_label.grid(row=5, column=0, columnspan=2)
+
+    # twitch connect inputs
+    argus_gui_components.twitch_profile_label.grid(row=6, column=0)
+    argus_gui_components.twitch_connect_button.config(
+        command=async_handler(perform_twitch_connection)
+    )
+    argus_gui_components.twitch_connect_button.grid(row=6, column=1)
+
+    # empty row as a separator
+    argus_gui_components.root.rowconfigure(7, minsize=30)
+
+    # info text
+    argus_gui_components.info_label.grid(row=8, column=0, columnspan=2)
+
+
+def make_update_gui(changelog):
+    setup_root()
+
+    # empty row as a separator
+    argus_gui_components.root.rowconfigure(1, minsize=30)
+
+    argus_gui_components.update_info_label.grid(row=2, column=0, columnspan=2)
 
     # empty row as a separator
     argus_gui_components.root.rowconfigure(3, minsize=30)
 
-    # twitch connect text
-    argus_gui_components.twitch_connect_label.grid(row=4, column=0)
-
-    # twitch connect inputs
-    argus_gui_components.twitch_profile_label.grid(row=5, column=0)
-    argus_gui_components.twitch_connect_button.config(
-        command=async_handler(perform_twitch_connection)
-    )
-    argus_gui_components.twitch_connect_button.grid(row=5, column=1)
-
-    # empty row as a separator
-    argus_gui_components.root.rowconfigure(6, minsize=30)
-
-    # info text
-    argus_gui_components.info_label.grid(row=7, column=0, columnspan=2)
-
-
-def make_update_gui(details):
-    setup_root()
-
-    argus_gui_components.update_info_label.grid(row=1, column=0, columnspan=2)
-    argus_gui_components.changelog_label.grid(row=2, column=0, columnspan=2)
+    argus_gui_components.changelog_label.grid(row=4, column=0, columnspan=2)
     changelog_message = ""
-    for changelog_line in details["changelog"]:
+    for changelog_line in changelog:
         changelog_message += changelog_line + "\n"
     argus_gui_components.changelog_label.config(text=changelog_message)
 
-    argus_gui_components.update_button.grid(row=3, column=0)
-    argus_gui_components.update_button.config(command=perform_update)
+    argus_gui_components.update_button.grid(row=5, column=0)
+    argus_gui_components.update_button.config(command=open_update_page)
 
-    argus_gui_components.update_quit_button.grid(row=3, column=1)
+    argus_gui_components.update_quit_button.grid(row=5, column=1)
     argus_gui_components.update_quit_button.config(command=perform_quit)
 
 
-def perform_update():
-    subprocess.Popen(["updater.exe"])
-    argus_gui_components.root.destroy()
+def open_update_page():
+    update_page = "https://github.com/bmilojkovic/argus-h2-app/releases"
+    webbrowser.open(update_page)
 
 
 def perform_quit():

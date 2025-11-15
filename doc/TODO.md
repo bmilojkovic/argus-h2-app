@@ -2,9 +2,6 @@
 
 ## To develop
 
-- Main executable checks if there are updates. If yes:
-  - Separate executable downloads the new main exe and updates it.
-  - New main exe updates the updater
 - Add logging to a file so we can collect errors from users
 - Make a different icon for the updater
 - Improve the look of the main icon
