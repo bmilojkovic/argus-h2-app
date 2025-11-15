@@ -102,7 +102,7 @@ def read_save_file(save_file_path):
         working_path = Path(sys.executable).parent
     lua_file_path = os.path.join(working_path, "current.lua")
     try:
-        subprocess.Popen(
+        extractor_process = subprocess.Popen(
             [
                 os.path.join(working_path, "tools", "HadesSavesExtractor.exe"),
                 "--extract",
@@ -112,8 +112,13 @@ def read_save_file(save_file_path):
             ],
             creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS,
         )
+        # wait to finish extracting
+        extractor_process.wait(4)
     except FileNotFoundError:
         argus_log("Problem starting save extractor. Aborting.")
+        return "INVALID"
+    except subprocess.TimeoutExpired:
+        argus_log("Save extraction took too long. Aborting cycle.")
         return "INVALID"
 
     try:
@@ -146,4 +151,4 @@ async def observer_loop():
                 else:
                     send_run_data(argus_data)
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)

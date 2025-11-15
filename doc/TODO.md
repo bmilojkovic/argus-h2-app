@@ -1,8 +1,7 @@
 # Development
 
-## To develop
-
-- Improve the look of the main icon
+- Frontend bugs:
+  - Arcana and Vows have rarity slightly misaligned
 
 # For later (2.0+)
 
@@ -23,12 +22,5 @@
   - Add hexes
   - Make all generators have better strategies
 - Test Apollo legendary with torches - seems to be a different Trait
-- Test Dio keepsake - maybe it stays as a different keepsake in followup biomes.
 - Make a benchmark for number of messages sent to twitch. Make sure it is below 100/min. Also, add a warning log if we get close.
-- Hammers missing legendaries?
-  - Melting Swipe, Dual Moonshot, Mirrored Thrasher, Mirrored Ankh, Meltinc Sickle, Trick Knives
-  - Hidden Helix, Clean Coil, Melting Helix, Inverted Blaze, Sudden Burst,
-  - Dashing Heave, Iron Core, Heaven Splitter, Giga Cleaver, Executioner's Chop, Psychic Whirlwind, Melting Shredder
-  - Helheim Charge, Melting Break, Wide Grin, Twisting Crash
-  - Melting Cross, Exhaust Riser, Counter Barrage,
 - Check Linux
