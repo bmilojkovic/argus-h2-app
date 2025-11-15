@@ -13,7 +13,7 @@ from argus_gui import (
 import argus_gui_components
 from argus_observing import observer_loop
 
-from argus_util import argus_backend, argus_version, argus_log
+from argus_util import argus_backend, argus_version, argus_log, clean_log
 
 
 def backend_available():
@@ -49,6 +49,7 @@ def update_check():
 
 
 def main():
+    clean_log()
     check_event_loop = asyncio.new_event_loop()
     if backend_available():
         if not update_check():

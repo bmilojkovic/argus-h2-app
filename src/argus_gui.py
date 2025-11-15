@@ -1,4 +1,3 @@
-import subprocess
 import asyncio
 import tkinter as tk
 import webbrowser
@@ -11,16 +10,24 @@ import argus_gui_components
 import argus_observing
 
 
+def has_sav_files(some_dir):
+    if os.path.exists(some_dir) and os.path.isdir(some_dir):
+        file_list = os.listdir(some_dir)
+
+        for file_item in file_list:
+            if file_item.endswith(".sav"):
+                return True
+    return False
+
+
 def update_save_location(save_path):
     argus_gui_components.save_path_entry.config(state="enabled")
     argus_gui_components.save_path_entry.delete(0, tk.END)
     argus_gui_components.save_path_entry.insert(0, save_path)
     argus_gui_components.save_path_entry.config(state="disabled")
 
-    # this file should always be in the save folder
-    if os.path.isdir(save_path) and os.path.isfile(
-        os.path.join(save_path, "GlobalSettingsWin.sjson")
-    ):
+    # try to find at least one .sav file
+    if os.path.isdir(save_path) and has_sav_files(save_path):
         argus_gui_components.save_path_label.config(
             image=argus_gui_components.check_icon
         )
@@ -120,6 +127,7 @@ def make_timeout_gui():
     # timeout label
     argus_gui_components.timeout_label.grid(row=2, column=0, columnspan=2)
 
+    # quit button
     argus_gui_components.update_quit_button.grid(row=3, column=0, columnspan=2)
     argus_gui_components.update_quit_button.config(command=perform_quit)
 
@@ -134,7 +142,7 @@ def make_main_gui():
     argus_gui_components.root.rowconfigure(1, minsize=30)
 
     # save path text
-    argus_gui_components.save_path_label.grid(row=2, column=0, columnspan=2)
+    argus_gui_components.save_path_label.grid(row=2, column=0)
 
     # save path inputs
     argus_gui_components.save_path_entry.grid(row=3, column=0)
@@ -146,7 +154,7 @@ def make_main_gui():
     argus_gui_components.root.rowconfigure(4, minsize=30)
 
     # twitch connect text
-    argus_gui_components.twitch_connect_label.grid(row=5, column=0, columnspan=2)
+    argus_gui_components.twitch_connect_label.grid(row=5, column=0)
 
     # twitch connect inputs
     argus_gui_components.twitch_profile_label.grid(row=6, column=0)
@@ -168,20 +176,24 @@ def make_update_gui(changelog):
     # empty row as a separator
     argus_gui_components.root.rowconfigure(1, minsize=30)
 
+    # letting the user know there is an update
     argus_gui_components.update_info_label.grid(row=2, column=0, columnspan=2)
 
     # empty row as a separator
     argus_gui_components.root.rowconfigure(3, minsize=30)
 
+    # changelog
     argus_gui_components.changelog_label.grid(row=4, column=0, columnspan=2)
     changelog_message = ""
     for changelog_line in changelog:
         changelog_message += changelog_line + "\n"
     argus_gui_components.changelog_label.config(text=changelog_message)
 
+    # update button
     argus_gui_components.update_button.grid(row=5, column=0)
     argus_gui_components.update_button.config(command=open_update_page)
 
+    # quit button
     argus_gui_components.update_quit_button.grid(row=5, column=1)
     argus_gui_components.update_quit_button.config(command=perform_quit)
 

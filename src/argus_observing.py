@@ -1,6 +1,8 @@
 import asyncio
 import os
 import subprocess
+from pathlib import Path
+import sys
 
 from slpp import slpp
 
@@ -95,24 +97,34 @@ def find_newest_changed_save():
 
 
 def read_save_file(save_file_path):
-    lua_file_path = "current.lua"
-    subprocess.run(
-        [
-            "." + os.sep + "tools" + os.sep + "HadesSavesExtractor",
-            "--extract",
-            save_file_path,
-            "--out",
-            lua_file_path,
-        ]
-    )
+    working_path = "."
+    if sys.executable.endswith("argus.exe"):
+        working_path = Path(sys.executable).parent
+    lua_file_path = os.path.join(working_path, "current.lua")
+    try:
+        subprocess.Popen(
+            [
+                os.path.join(working_path, "tools", "HadesSavesExtractor.exe"),
+                "--extract",
+                save_file_path,
+                "--out",
+                lua_file_path,
+            ],
+            creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS,
+        )
+    except FileNotFoundError:
+        argus_log("Problem starting save extractor. Aborting.")
+        return "INVALID"
 
     try:
         with open(lua_file_path, "r") as file:
             content = file.read()
     except FileNotFoundError:
         argus_log(f"Error: The file '{lua_file_path}' was not found.")
+        return "INVALID"
     except Exception as e:
-        argus_log(f"An error occurred: {e}")
+        argus_log(f"An error occurred while reading lua: {e}")
+        return "INVALID"
 
     save_data = slpp.decode("{" + content + "}")
 
