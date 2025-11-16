@@ -80,8 +80,12 @@ def update_twitch_connection(success, argus_token, profile_pic):
 
 
 async def perform_twitch_connection():
-    argus_token, profile_pic = do_argus_auth()
-    update_twitch_connection(argus_token is not None, argus_token, profile_pic)
+    argus_token, profile_pic = await do_argus_auth()
+    config_argus_token = get_argus_token()
+    # we update the GUI if we got a good connection OR
+    # if we didn't get a connection, and we don't already have one from earlier
+    if argus_token is not None or config_argus_token == "FAIL":
+        update_twitch_connection(argus_token is not None, argus_token, profile_pic)
 
 
 async def check_twitch_connection():

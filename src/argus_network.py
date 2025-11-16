@@ -1,3 +1,4 @@
+import asyncio
 import requests
 from argus_util import argus_log, argus_backend
 import urllib
@@ -10,7 +11,7 @@ extension_id = "sl19e3aebmadlewzt7mxfv3j3llwwv"
 config_file_path = "argus_token.ini"
 
 
-def do_argus_auth():
+async def do_argus_auth():
     config = configparser.ConfigParser()
     base_url = "https://id.twitch.tv/oauth2/authorize"
     stateBytes = secrets.token_hex(16)
@@ -43,7 +44,7 @@ def do_argus_auth():
             response_data = response.text.split("\n")
             if len(response_data) != 2:
                 argus_log("Got strange response data: " + response.text)
-                return "FAIL", None
+                return None, None
             new_argus_token = response_data[0]
             new_profile_pic = response_data[1]
             config["DEFAULT"] = {
@@ -55,8 +56,8 @@ def do_argus_auth():
             return new_argus_token, new_profile_pic
         else:
             retries = retries - 1
-        time.sleep(1)
-    return "FAIL", None
+        await asyncio.sleep(1)
+    return None, None
 
 
 def check_argus_token_ok(argus_token):
