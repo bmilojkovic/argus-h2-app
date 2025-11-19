@@ -7,6 +7,7 @@
 #define MyAppPublisher "Branislav Milojkovic"
 #define MyAppURL "https://github.com/bmilojkovic/argus-h2-app"
 #define MyAppExeName "argus.exe"
+#define RepoPath "D:\Projects\hades2\argus\argus-h2-app"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -30,11 +31,11 @@ ArchitecturesAllowed=x64compatible
 ; the 64-bit view of the registry.
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
-LicenseFile=D:\Projects\hades2\argus\argus-h2-app\LICENSE
+LicenseFile={#RepoPath}\LICENSE
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=D:\Projects\hades2\argus\argus-h2-app\release\argus_{#MyAppVersion}
+OutputDir={#RepoPath}\release\argus_{#MyAppVersion}
 OutputBaseFilename=argus_setup
 SolidCompression=yes
 WizardStyle=modern dynamic
@@ -46,10 +47,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Projects\hades2\argus\argus-h2-app\dist\argus_{#MyAppVersion}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projects\hades2\argus\argus-h2-app\dist\argus_{#MyAppVersion}\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "D:\Projects\hades2\argus\argus-h2-app\dist\argus_{#MyAppVersion}\tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "D:\Projects\hades2\argus\argus-h2-app\dist\argus_{#MyAppVersion}\img\*"; DestDir: "{app}\img"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#RepoPath}\dist\argus_{#MyAppVersion}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoPath}\dist\argus_{#MyAppVersion}\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#RepoPath}\dist\argus_{#MyAppVersion}\tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#RepoPath}\dist\argus_{#MyAppVersion}\img\*"; DestDir: "{app}\img"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
