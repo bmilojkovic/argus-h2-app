@@ -7,8 +7,8 @@ If you wish to dive deeper into how Argus works, you might want to look at two o
 
 The main flow of data from the game to Twitch is as follows:
 
-1. The data is parsed and assembled from a save file.
-2. We parse the raw save data on the app and send the relevant parts of it to our backend service.
+1. The data is read and assembled from a save file.
+2. We parse the raw data on the app and send the relevant parts of it to our backend service.
 3. Our backend service does additional parsing and data transformation to prepare everything for the frontend. It then uses the Twitch pubsub API to broadcast information to viewers.
 4. The Twitch extension receives this broadcast and displays information to viewers.
 

@@ -80,6 +80,7 @@ twitch_connect_label = ttk.Label(
     image=question_icon,
     font=("Helvetica", 16),
     text="Twitch Connection: Checking...",
+    width=len("Twitch Connection: Checking..."),
     compound=tk.RIGHT,
     background="white",
 )

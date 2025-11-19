@@ -75,7 +75,7 @@ def update_twitch_connection(success, argus_token, profile_pic):
         argus_gui_components.twitch_connect_label.config(
             image=argus_gui_components.x_icon, text="Twitch Connection"
         )
-        argus_gui_components.twitch_connect_button.config(text="Connect")
+        # argus_gui_components.twitch_connect_button.config(text="Connect")
         argus_observing.unset_argus_token()
 
 
@@ -146,26 +146,30 @@ def make_main_gui():
     argus_gui_components.root.rowconfigure(1, minsize=30)
 
     # save path text
-    argus_gui_components.save_path_label.grid(row=2, column=0)
+    argus_gui_components.save_path_label.grid(
+        row=2, column=0, columnspan=2, sticky="W", padx=20
+    )
 
     # save path inputs
-    argus_gui_components.save_path_entry.grid(row=3, column=0)
+    argus_gui_components.save_path_entry.grid(row=3, column=0, sticky="W", padx=20)
     check_save_location()
     argus_gui_components.save_path_browse_button.config(command=browse_save_location)
-    argus_gui_components.save_path_browse_button.grid(row=3, column=1)
+    argus_gui_components.save_path_browse_button.grid(row=3, column=1, padx=20)
 
     # empty row as a separator
     argus_gui_components.root.rowconfigure(4, minsize=30)
 
     # twitch connect text
-    argus_gui_components.twitch_connect_label.grid(row=5, column=0)
+    argus_gui_components.twitch_connect_label.grid(
+        row=5, column=0, columnspan=2, sticky="W", padx=20
+    )
 
     # twitch connect inputs
-    argus_gui_components.twitch_profile_label.grid(row=6, column=0)
+    argus_gui_components.twitch_profile_label.grid(row=6, column=0, sticky="W", padx=20)
     argus_gui_components.twitch_connect_button.config(
         command=async_handler(perform_twitch_connection)
     )
-    argus_gui_components.twitch_connect_button.grid(row=6, column=1)
+    argus_gui_components.twitch_connect_button.grid(row=6, column=1, padx=20)
 
     # empty row as a separator
     argus_gui_components.root.rowconfigure(7, minsize=30)
@@ -205,6 +209,7 @@ def make_update_gui(changelog):
 def open_update_page():
     update_page = "https://github.com/bmilojkovic/argus-h2-app/releases"
     webbrowser.open(update_page)
+    argus_gui_components.root.destroy()
 
 
 def perform_quit():
