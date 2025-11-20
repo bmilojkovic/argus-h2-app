@@ -78,6 +78,13 @@ def parse_data(save_data):
         "pinData": "",
     }
 
+    if (
+        "CurrentRun" not in save_data
+        or "Hero" not in save_data["CurrentRun"]
+        or "Traits" not in save_data["CurrentRun"]["Hero"]
+    ):
+        argus_log("Malformed save_data. Couldn't find hero traits.")
+        return "INVALID"
     hero_traits = save_data["CurrentRun"]["Hero"]["Traits"]
     for trait in hero_traits:
         if is_boon_with_rarity(trait):

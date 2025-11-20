@@ -98,7 +98,8 @@ def find_newest_changed_save():
 
 def read_save_file(save_file_path):
     working_path = "."
-    if sys.executable.endswith("argus.exe"):
+    # this will be true if we are running an .exe and not a python script any more
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         working_path = Path(sys.executable).parent
     lua_file_path = os.path.join(working_path, "current.lua")
     try:
