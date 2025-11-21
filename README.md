@@ -89,10 +89,11 @@ As a rule-of-thumb: if the information would be contained in a wiki page, we pro
     - Dionysus
     - Hermes
     - Chaos (including curses)
+  - Hammers
   - Keepsake
   - Hex
 - Panel 2: **Arcana**
-  - All currently active Arcana cards with their descriptions, shown in no particular order.
+  - All currently active Arcana cards with their descriptions.
 - Panel 3: **Vows of Night**
   - Shown like in the Oath of the Unseen with full descriptions.
 - Panel 4: **Pinned boons**
@@ -116,7 +117,7 @@ If you have feedback or questions, feel free to contact the original author of t
 
 ## Note on the mod
 
-This app [also exists](https://github.com/bmilojkovic/argus-h2-mod) as a mod for `Hades II`. The mod is now deprecated since this app will probably always be more reliable and faster.
+This app [also exists as a mod](https://github.com/bmilojkovic/argus-h2-mod) for `Hades II`. The mod is now deprecated since this app will probably always be more reliable and faster.
 
 # Credits
 
