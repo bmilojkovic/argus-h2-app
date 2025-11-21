@@ -4,7 +4,6 @@ from argus_util import argus_log, argus_backend
 import urllib
 import webbrowser
 import secrets
-import time
 import configparser
 
 extension_id = "sl19e3aebmadlewzt7mxfv3j3llwwv"
