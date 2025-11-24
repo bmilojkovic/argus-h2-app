@@ -2,6 +2,8 @@
 
 - Frontend bugs:
   - Arcana and Vows have rarity slightly misaligned
+- Backend bugs:
+  - Migrate the storage object "twitchIdByArgusToken" to "twitchProfileByArgusToken"
 
 # For later (2.0+)
 
