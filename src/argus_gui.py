@@ -6,6 +6,7 @@ from tkinter import filedialog
 import os
 
 from argus_network import do_argus_auth, get_argus_token, check_argus_token_ok
+from argus_util import argus_version
 import argus_gui_components
 import argus_observing
 
@@ -113,7 +114,7 @@ def setup_root():
     argus_gui_components.root.columnconfigure(0, weight=1)
     argus_gui_components.root.columnconfigure(1, weight=1)
     argus_gui_components.root.rowconfigure(0, weight=1)
-    argus_gui_components.root.title("Argus")
+    argus_gui_components.root.title("Argus " + argus_version)
 
     window_icon_image = tk.PhotoImage(file=os.path.join("img", "logo192.png"))
     argus_gui_components.root.iconphoto(True, window_icon_image)

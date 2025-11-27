@@ -1,4 +1,4 @@
-set argus_version=1.1.0
+set argus_version=1.1.2
 
 rmdir /s /q dist\argus_%argus_version%\
 pyinstaller.exe .\src\main.py -w -i img\icon.ico -n argus_%argus_version%

@@ -8,7 +8,7 @@ from slpp import slpp
 
 from argus_network import send_run_data
 from argus_parsing import parse_data
-from argus_util import argus_log
+from argus_util import argus_log, get_user_data_dir, is_installation
 
 observer_running = True
 
@@ -99,9 +99,9 @@ def find_newest_changed_save():
 def read_save_file(save_file_path):
     working_path = "."
     # this will be true if we are running an .exe and not a python script any more
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    if is_installation():
         working_path = Path(sys.executable).parent
-    lua_file_path = os.path.join(working_path, "current.lua")
+    lua_file_path = os.path.join(get_user_data_dir(), "current.lua")
     try:
         extractor_process = subprocess.Popen(
             [

@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "Argus"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.2"
 #define MyAppPublisher "Branislav Milojkovic"
 #define MyAppURL "https://github.com/bmilojkovic/argus-h2-app"
 #define MyAppExeName "argus.exe"
@@ -39,6 +39,9 @@ OutputDir={#RepoPath}\release\argus_{#MyAppVersion}
 OutputBaseFilename=argus_setup
 SolidCompression=yes
 WizardStyle=modern dynamic
+
+[UninstallDelete]
+Type: filesandordirs; Name:"{localappdata}\Argus"
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

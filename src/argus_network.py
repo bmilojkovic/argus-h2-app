@@ -1,13 +1,14 @@
 import asyncio
 import requests
-from argus_util import argus_log, argus_backend
+from argus_util import argus_log, argus_backend, get_user_data_dir
 import urllib
 import webbrowser
 import secrets
 import configparser
+import os
 
 extension_id = "sl19e3aebmadlewzt7mxfv3j3llwwv"
-config_file_path = "argus_token.ini"
+config_file_path = os.path.join(get_user_data_dir(), "argus_token.ini")
 
 
 async def do_argus_auth():
