@@ -90,7 +90,7 @@ def get_test_data(which_test):
         elemental_data = "Fire:1;;Water:0;;Earth:3;;Air:0;;Aether:0"
         pin_data = "RandomStatusBoon;;AresExCastBoon;;GoodStuffBoon"
         vow_data = "4;;BossDifficultyShrineUpgrade 1;;MinibossCountShrineUpgrade 2;;NextBiomeEnemyShrineUpgrade 2;;BiomeSpeedShrineUpgrade"
-        arcana_data = "3;;ScreenReroll 3;;StatusVulnerability 2;;ChanneledCast 3;;HealthRegen 3;;LowManaDamageBonus 1;;CastCount 3;;SorceryRegenUpgrade"
+        arcana_data = "3;;PanelRerollMetaUpgrade 3;;EffectVulnerabilityMetaUpgrade 2;;ChannelSlowMetaUpgrade 3;;DoorHealMetaUpgrade 3;;LowManaDamageMetaupgrade 1;;CastDamageMetaUpgrade 3;;SorceryRegenMetaUpgrade"
     elif which_test == "minimal":
         boon_data = "Common;;ApolloWeaponBoon"
         weapon_data = NOWEAPONS
@@ -110,7 +110,7 @@ def get_test_data(which_test):
         elemental_data = "Fire:1;;Water:0;;Earth:3;;Air:0;;Aether:0"
         pin_data = "RandomStatusBoon;;AresExCastBoon;;GoodStuffBoon"
         vow_data = "4;;BossDifficultyShrineUpgrade 1;;MinibossCountShrineUpgrade 2;;NextBiomeEnemyShrineUpgrade 2;;BiomeSpeedShrineUpgrade"
-        arcana_data = "3;;ScreenReroll 3;;StatusVulnerability 2;;ChanneledCast 3;;HealthRegen 3;;LowManaDamageBonus 1;;CastCount 3;;SorceryRegenUpgrade"
+        arcana_data = "3;;PanelRerollMetaUpgrade 3;;EffectVulnerabilityMetaUpgrade 2;;ChannelSlowMetaUpgrade 3;;DoorHealMetaUpgrade 3;;LowManaDamageMetaupgrade 1;;CastDamageMetaUpgrade 3;;SorceryRegenMetaUpgrade"
     elif which_test == "pins":
         boon_data = "Common;;ApolloManaBoon Rare;;AphroditeSpecialBoon Epic;;PoseidonWeaponBoon Heroic;;PoseidonCastBoon Common;;DaggerBlinkAoETrait Duo;;PoseidonSplashSprintBoon Rare;;DoubleRewardBoon Legendary;;AmplifyConeBoon Infusion;;ElementalDodgeBoon"
         weapon_data = "Rare;;DaggerBlockAspect"
@@ -121,7 +121,7 @@ def get_test_data(which_test):
         elemental_data = "Fire:1;;Water:0;;Earth:3;;Air:0;;Aether:0"
         pin_data = "LuckyBoon;;ElementalUnifiedBoon;;GoodStuffBoon"
         vow_data = "4;;BossDifficultyShrineUpgrade 1;;MinibossCountShrineUpgrade 2;;NextBiomeEnemyShrineUpgrade 2;;BiomeSpeedShrineUpgrade"
-        arcana_data = "3;;ScreenReroll 3;;StatusVulnerability 2;;ChanneledCast 3;;HealthRegen 3;;LowManaDamageBonus 1;;CastCount 3;;SorceryRegenUpgrade"
+        arcana_data = "3;;PanelRerollMetaUpgrade 3;;EffectVulnerabilityMetaUpgrade 2;;ChannelSlowMetaUpgrade 3;;DoorHealMetaUpgrade 3;;LowManaDamageMetaupgrade 1;;CastDamageMetaUpgrade 3;;SorceryRegenMetaUpgrade"
     else:
         boon_data = NOBOONS
         weapon_data = NOWEAPONS
