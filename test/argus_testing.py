@@ -81,10 +81,14 @@ def generate_test_data():
 
 def get_test_data(which_test):
     if which_test == "nominal":
-        boon_data = "Common;;ApolloManaBoon Rare;;AphroditeSpecialBoon Epic;;PoseidonWeaponBoon Heroic;;PoseidonCastBoon Common;;DaggerBlinkAoETrait Duo;;PoseidonSplashSprintBoon Rare;;DoubleRewardBoon Legendary;;AmplifyConeBoon Infusion;;ElementalDodgeBoon"
+        boon_data = "Rare;;ApolloManaBoon Rare;;AphroditeSpecialBoon Epic;;PoseidonWeaponBoon Heroic;;PoseidonCastBoon Common;;DaggerBlinkAoETrait Duo;;PoseidonSplashSprintBoon Rare;;DoubleRewardBoon Legendary;;AmplifyConeBoon Infusion;;ElementalDodgeBoon"
         weapon_data = "Rare;;DaggerBlockAspect"
         familiar_data = (
-            "8;;LastStandFamiliar 2;;LastStandFamiliar 3;;FamiliarCatResourceBonus"
+            # "8;;HealthFamiliar 2;;HealthFamiliar 3;;FamiliarFrogResourceBonus"
+            # "8;;CritFamiliar 2;;CritFamiliar 3;;FamiliarRavenResourceBonus"
+            # "8;;LastStandFamiliar 2;;LastStandFamiliar 3;;FamiliarCatResourceBonus"
+            # "8;;DigFamiliar 2;;DigFamiliar 3;;FamiliarHoundResourceBonus"
+            "8;;DodgeFamiliar 2;;DodgeFamiliar 3;;FamiliarPolecatResourceBonus"
         )
         extra_data = "Epic;;ForceZeusBoonKeepsake Common;;SpellSummonTrait"
         elemental_data = "Fire:1;;Water:0;;Earth:3;;Air:0;;Aether:0"
